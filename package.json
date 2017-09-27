@@ -1,0 +1,15 @@
+{
+  "name": "leanApp",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/hustlrb/leanApp.git",
+  "author": "runsisi <runsisi@hust.edu.cn>",
+  "license": "MIT",
+  "dependencies": {
+    "babel-preset-env": "^1.6.0",
+    "babel-register": "^6.26.0",
+    "leancloud-realtime": "^3.5.7",
+    "leancloud-realtime-plugin-live-query": "^1.0.0",
+    "leancloud-storage": "^3.2.1"
+  }
+}
