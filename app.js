@@ -37,6 +37,8 @@ async function main() {
 async function test() {
   const Todo = AV.Object.extend('Todo');
 
+  let id = null;
+
   try {
     const todo_count = await new AV.Query(Todo).count();
     console.log('todo count: ', todo_count);
@@ -47,7 +49,8 @@ async function test() {
       todo.set('content', '每周工程师会议，周一下午2点');
 
       const res = await todo.save();
-      console.log('new todo created with objectId: ' + res.id);
+      id = res.id;
+      console.log('new todo created with objectId: ' + id);
     }
 
     const todo_1th = await new AV.Query(Todo).first();
@@ -59,6 +62,15 @@ async function test() {
     todo_all.forEach((i) => {
       console.log(' - todo: ', i.toJSON());
     });
+
+    console.log('---------------------------------------------------------');
+
+    let todo = new Todo();
+    todo.id = id;
+    const res = await todo.fetch({
+      keys: 'title,content'
+    });
+    console.log('fetched content: ', res);
   } catch (e) {
     throw e;
   }
