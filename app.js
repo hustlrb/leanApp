@@ -51,10 +51,14 @@ async function test() {
     }
 
     const todo_1th = await new AV.Query(Todo).first();
-    console.log('first todo: ', todo_1th);
+    console.log('first todo raw: ', todo_1th);
+    console.log('first todo: ', todo_1th.toJSON());
 
     const todo_all = await new AV.Query(Todo).find();
-    console.log('all todos: ', todo_all);
+    console.log('all todos:');
+    todo_all.forEach((i) => {
+      console.log(' - todo: ', i.toJSON());
+    });
   } catch (e) {
     throw e;
   }
