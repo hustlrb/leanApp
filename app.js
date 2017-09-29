@@ -30,9 +30,9 @@ class TodoFolder extends AV.Object {}
 })();
 
 async function main() {
-  // await test();
+  await test();
   // await test2();
-  await test3();
+  // await test3();
 }
 
 async function test() {
@@ -45,12 +45,21 @@ async function test() {
     console.log('todo count: ', todoCount);
 
     if (todoCount < 2) {
+      let folder = new TodoFolder({
+        name: '周会',
+        priority: 'important',
+      });
+
+      await folder.save();
+
       let todo = new Todo();
       todo.set('title', '工程师周会');
       todo.set('content', '每周工程师会议，周一下午2点');
+      todo.set('folder', folder);
 
       const res = await todo.save();
-      console.log('new todo created with objectId: ', res.id);
+
+      console.log('new todo created: ', res, todo);
     }
 
     const firstTodo = await new AV.Query(Todo).first();
