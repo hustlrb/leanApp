@@ -31,7 +31,8 @@ class TodoFolder extends AV.Object {}
 
 async function main() {
   // await test();
-  await test2();
+  // await test2();
+  await test3();
 }
 
 async function test() {
@@ -141,4 +142,20 @@ async function test2() {
     if (todoFolders.length > 0)
       lastCreatedAt = todoFolders[todoFolders.length - 1].createdAt;
   } while (todoFolders.length > 0);
+}
+
+async function test3() {
+  // query the first item
+  const queryFirstStr = 'select * from TodoFolder ' +
+    'limit 1 ' +
+    'order by createdAt ' +
+    'desc';
+  const firstFolder = await AV.Query.doCloudQuery(queryFirstStr);
+  firstFolder.results.forEach((i) => {
+    console.log(' - todo folder: ', i.toJSON());
+  });
+
+  const queryCountStr = 'select count(*) from TodoFolder';
+  const count = await AV.Query.doCloudQuery(queryCountStr);
+  console.log('count: ', count);
 }
