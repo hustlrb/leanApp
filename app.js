@@ -37,40 +37,44 @@ async function main() {
 async function test() {
   const Todo = AV.Object.extend('Todo');
 
-  let id = null;
+  let firstId = null;
 
   try {
-    const todo_count = await new AV.Query(Todo).count();
-    console.log('todo count: ', todo_count);
+    const todoCount = await new AV.Query(Todo).count();
+    console.log('todo count: ', todoCount);
 
-    if (todo_count < 5) {
+    if (todoCount < 2) {
       let todo = new Todo();
       todo.set('title', '工程师周会');
       todo.set('content', '每周工程师会议，周一下午2点');
 
       const res = await todo.save();
-      id = res.id;
-      console.log('new todo created with objectId: ' + id);
+      console.log('new todo created with objectId: ', res.id);
     }
 
-    const todo_1th = await new AV.Query(Todo).first();
-    console.log('first todo raw: ', todo_1th);
-    console.log('first todo: ', todo_1th.toJSON());
+    const firstTodo = await new AV.Query(Todo).first();
+    firstId = firstTodo.id;
+    console.log('first raw todo: ', firstTodo);
 
-    const todo_all = await new AV.Query(Todo).find();
-    console.log('all todos:');
-    todo_all.forEach((i) => {
-      console.log(' - todo: ', i.toJSON());
+    const point = new AV.GeoPoint(39.9, 116.4);
+    firstTodo.set('whereCreated', point);
+    await firstTodo.save();
+
+    const todoList = await new AV.Query('Todo').find(); // could be className string or the AV.Object subclass type
+    console.log('todo list:');
+    todoList.forEach((i) => {
+      console.log(' - ', i.toJSON());
     });
 
     console.log('---------------------------------------------------------');
 
-    let todo = new Todo();
-    todo.id = id;
-    const res = await todo.fetch({
-      keys: 'title,content'
+    const todoToFetch = AV.Object.createWithoutData('Todo', firstId); // className should be string type
+    // const todoToFetch = new Todo();
+    // todoToFetch.id = firstId;
+    const todoFetched = await todoToFetch.fetch({
+      keys: 'title,whereCreated'
     });
-    console.log('fetched content: ', res);
+    console.log('todo fetched: ', todoFetched.toJSON());
   } catch (e) {
     throw e;
   }
