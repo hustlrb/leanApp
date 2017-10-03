@@ -30,9 +30,10 @@ class TodoFolder extends AV.Object {}
 })();
 
 async function main() {
-  await test();
+  // await test();
   // await test2();
   // await test3();
+  await test4();
 }
 
 async function test() {
@@ -155,16 +156,22 @@ async function test2() {
 
 async function test3() {
   // query the first item
-  const queryFirstStr = 'select * from TodoFolder ' +
-    'limit 1 ' +
-    'order by createdAt ' +
-    'desc';
+  const queryFirstStr = "select * from TodoFolder limit 1 order by createdAt desc";
   const firstFolder = await AV.Query.doCloudQuery(queryFirstStr);
   firstFolder.results.forEach((i) => {
     console.log(' - todo folder: ', i.toJSON());
   });
 
-  const queryCountStr = 'select count(*) from TodoFolder';
+  const queryCountStr = "select count(*) from TodoFolder";
   const count = await AV.Query.doCloudQuery(queryCountStr);
   console.log('count: ', count);
+}
+
+async function test4() {
+  const curUserId = AV.User.current().id;
+
+  const insertStr = `insert into TodoFolder(name, ACL) values ('test4-0', {'*': {read: true, write: false}}), 
+      ('test4-1', {${curUserId}: {read: true, write: true}})`;
+
+  await AV.Query.doCloudQuery(insertStr);
 }
