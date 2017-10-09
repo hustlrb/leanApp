@@ -33,7 +33,8 @@ async function main() {
   // await test();
   // await test2();
   // await test3();
-  await test4();
+  // await test4();
+  await test5();
 }
 
 async function test() {
@@ -174,4 +175,16 @@ async function test4() {
       ('test4-1', {${curUserId}: {read: true, write: true}})`;
 
   await AV.Query.doCloudQuery(insertStr);
+}
+
+async function test5() {
+  const User = AV.Object.extend('_User');
+
+  const user = new User({
+    username: 'testuser',
+    password: 'password',
+  });
+
+  const res = await user.save();
+  console.log('test5, save result: ', res);
 }
