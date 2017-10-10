@@ -4,6 +4,7 @@ import AV from 'leancloud-storage';
 
 const LC_APP_ID = 'QApBtOkMNfNo0lGaHxKBSWXX-gzGzoHsz';
 const LC_APP_KEY = 'znR6wk5JzFU0XIkgKxrM3fnH';
+const LC_MASTER_KEY = 'y0Cox0kRECTff8hf0OF96Gza';
 
 const PHONE = '18684700942';
 const PASSWORD = '123456';
@@ -14,7 +15,8 @@ class TodoFolder extends AV.Object {}
 (async function entry() {
   AV.init({
     appId: LC_APP_ID,
-    appKey: LC_APP_KEY
+    appKey: LC_APP_KEY,
+    masterKey: LC_MASTER_KEY
   });
 
   AV.Object.register(Todo);
@@ -34,7 +36,8 @@ async function main() {
   // await test2();
   // await test3();
   // await test4();
-  await test5();
+  // await test5();
+  await test6();
 }
 
 async function test() {
@@ -186,5 +189,13 @@ async function test5() {
   });
 
   const res = await user.save();
-  console.log('test5, save result: ', res);
+  console.log('test5, save result: ', res.toJSON());
+}
+
+async function test6() {
+  AV.Cloud.useMasterKey();
+  const ptrUser = AV.Object.createWithoutData('_User', '59dcb745a22b9d00619768fc');
+
+
+  await ptrUser.destroy();
 }
